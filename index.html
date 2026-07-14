@@ -333,6 +333,21 @@
   .ml.on{color:var(--blue)}
   @media (max-width:860px){.myths{grid-template-columns:1fr}}
   @media (max-width:520px){header .logo img{height:42px}}
+  .ac-wrap{position:relative}
+  .ac-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 22px 44px -18px rgba(15,32,56,.55);max-height:230px;overflow-y:auto;display:none}
+  .ac-item{display:flex;align-items:center;gap:9px;padding:11px 13px;font-size:13.5px;color:var(--ink);cursor:pointer;border-bottom:1px solid #F0F4F9}
+  .ac-item:last-child{border-bottom:none}
+  .ac-item:hover{background:var(--blue-soft)}
+  .ac-item svg{width:16px;height:16px;stroke:var(--blue);flex:none}
+  .ac-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sending{display:none;text-align:center;padding:34px 10px 30px}
+  .sending.show{display:block}
+  .spinner{width:46px;height:46px;border:4px solid var(--line);border-top-color:var(--blue);border-radius:50%;margin:0 auto 18px;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .sending-t{font-weight:700;color:var(--ink);font-size:15px;margin-bottom:16px}
+  .sending-bar{height:6px;background:var(--line);border-radius:100px;overflow:hidden;max-width:260px;margin:0 auto}
+  .sending-bar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),#3B7BEA);border-radius:100px;animation:fillbar 1.3s ease forwards}
+  @keyframes fillbar{to{width:100%}}
 </style>
 </head>
 <body>
@@ -391,7 +406,7 @@
             <div class="panel" data-p="2">
               <div class="q">Où se situe votre bien ?</div>
               <div class="qs">L'adresse reste confidentielle, elle sert à l'expert qui se déplace.</div>
-              <div class="field"><label for="adr">Adresse <span class="o">(facultatif)</span></label><input type="text" id="adr" placeholder="12 rue de la Convention" autocomplete="street-address" /></div>
+              <div class="field"><label for="adr">Adresse <span class="o">(facultatif)</span></label><div class="ac-wrap"><input type="text" id="adr" placeholder="Commencez à taper votre adresse…" autocomplete="off" /><div class="ac-list" id="ac_list"></div></div></div>
               <div class="r2"><div class="field"><label for="cp">Code postal</label><input type="text" id="cp" inputmode="numeric" placeholder="75015" autocomplete="postal-code" /></div><div class="field"><label for="ville">Ville</label><input type="text" id="ville" placeholder="Paris" autocomplete="address-level2" /></div></div>
               <div class="err" id="e2">Indiquez au moins le code postal et la ville.</div>
             </div>
@@ -425,9 +440,10 @@
             <div class="success" id="ok">
               <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
               <h3>Demande envoyée.</h3>
-              <p>Je vous rappelle <b>sous 24 h</b> pour convenir d'une visite. À très vite.</p>
+              <p>Votre demande est bien enregistrée. Je reviens vers vous <b>sous 24 h</b> pour vous proposer l'estimation la plus fiable possible de votre bien.</p>
               <div class="recap" id="recap"></div>
             </div>
+            <div class="sending" id="sending"><div class="spinner"></div><div class="sending-t">Envoi de votre demande…</div><div class="sending-bar"><span></span></div></div>
             <div class="nav" id="nav">
               <button type="button" class="back" id="back" hidden><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Retour</button>
               <button type="button" class="next" id="next">Continuer <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -628,7 +644,7 @@
     try{fetch(SUPABASE_FN_URL,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify(Object.assign({source:'landing-estimation-form'},p))});}catch(e){}
     console.log('Estimation:',p);
     document.getElementById('nav').style.display='none';document.querySelector('.prog').style.display='none';document.getElementById('foot').style.display='none';
-    panels.forEach(x=>x.classList.remove('active'));document.getElementById('ok').classList.add('show');
+    panels.forEach(x=>x.classList.remove('active'));document.getElementById('sending').classList.add('show');
     function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
     const bienParts=[p.type,p.surface&&p.surface+' m²',p.pieces&&p.pieces+' pièces',p.chambres&&p.chambres+' ch.'].filter(Boolean).join(' · ');
     let sit='';if(p.situation==='Rez-de-chaussée')sit='Rez-de-chaussée';else if(p.situation==='En étage')sit=p.etage?('Étage '+p.etage):'En étage';
@@ -640,8 +656,35 @@
     rh+='</div>';
     document.getElementById('recap').innerHTML=rh;
     document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(function(){document.getElementById('sending').classList.remove('show');document.getElementById('ok').classList.add('show');},1400);
   }
   render();
+  function bindAutocomplete(){
+    var inp=document.getElementById('adr'),list=document.getElementById('ac_list'),t;
+    if(!inp||!list)return;
+    function hide(){list.style.display='none';list.innerHTML='';}
+    inp.addEventListener('input',function(){
+      var q=inp.value.trim();clearTimeout(t);
+      if(q.length<3){hide();return;}
+      t=setTimeout(function(){
+        fetch('https://api-adresse.data.gouv.fr/search/?q='+encodeURIComponent(q)+'&limit=6&autocomplete=1')
+          .then(function(r){return r.json();})
+          .then(function(d){
+            list.innerHTML='';
+            if(!d.features||!d.features.length){hide();return;}
+            d.features.forEach(function(fe){
+              var pr=fe.properties,it=document.createElement('div');it.className='ac-item';
+              it.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>'+pr.label+'</span>';
+              it.onclick=function(){inp.value=pr.name||pr.label;document.getElementById('cp').value=pr.postcode||'';document.getElementById('ville').value=pr.city||'';hide();};
+              list.appendChild(it);
+            });
+            list.style.display='block';
+          }).catch(function(){hide();});
+      },250);
+    });
+    document.addEventListener('click',function(e){if(!e.target.closest('.ac-wrap'))hide();});
+  }
+  bindAutocomplete();
 </script>
 </body>
 </html>
