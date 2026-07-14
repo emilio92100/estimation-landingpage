@@ -149,6 +149,16 @@
   .notes{width:100%;min-height:96px;border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-size:14px;resize:vertical;line-height:1.5}
   .notes:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,201,.1)}
 
+  .notes-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+  .notes-state{font-size:12px;font-weight:600;color:var(--soft)}
+  .notes-state.warn{color:#C2790C}
+  .notes-state.ok{color:#12A85E}
+  .notes-state.err{color:#C0392B}
+  .notes-save{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:none;border-radius:11px;background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 12px 22px -12px rgba(37,99,201,.7);transition:opacity .15s,transform .1s}
+  .notes-save:disabled{opacity:.4;cursor:default;box-shadow:none}
+  .notes-save:not(:disabled):active{transform:translateY(1px)}
+  .notes-save svg{width:15px;height:15px;stroke:currentColor}
+  .notes-save.saving svg{animation:spin .8s linear infinite}
   .d-cbtn.wa{border-color:#25D366;color:#0B7A5E}
   .d-cbtn.wa svg{color:#25D366;stroke:none;fill:currentColor}
   .d-cbtn.wa:hover{background:#EAFBF2;border-color:#25D366}
@@ -337,13 +347,26 @@
         '</div>'+
         '<div class="d-sec">Statut</div><div class="seg" id="seg">'+seg+'</div>'+
         '<div class="d-sec">Notes</div><textarea class="notes" id="notes" placeholder="Ajouter une note (rappel, remarque…)">'+esc(l.notes)+'</textarea>'+
+        '<div class="notes-bar"><span class="notes-state" id="nstate"></span><button class="notes-save" id="nsave" disabled><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Enregistrer</button></div>'+
         '<div class="d-sec">Informations</div><div class="d-grid">'+row('Reçu le',esc(fullDate(l.created_at)))+row('Source',esc(l.source))+'</div>'+
         '<button class="d-del" id="ddel"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/></svg>Supprimer cette demande</button>'+
       '</div>';
     document.getElementById('drawer').classList.add('show');document.getElementById('scrim').classList.add('show');
     document.getElementById('dclose').addEventListener('click',closeDrawer);
     Array.prototype.forEach.call(document.querySelectorAll('#seg button'),function(b){b.addEventListener('click',function(){setStatus(CUR.id,b.dataset.s);openDrawer(CUR.id);});});
-    var nt=document.getElementById('notes');nt.addEventListener('blur',function(){if(nt.value!==(CUR.notes||'')){CUR.notes=nt.value;api('update',{id:CUR.id,notes:nt.value}).then(function(){toast('Note enregistrée');});}});
+    var nt=document.getElementById('notes'),ns=document.getElementById('nsave'),nst=document.getElementById('nstate');
+    function noteDirty(){return nt.value!==(CUR.notes||'');}
+    function refreshNote(){var d=noteDirty();ns.disabled=!d;nst.textContent=d?'Modifications non enregistrées':'';nst.className='notes-state'+(d?' warn':'');}
+    nt.addEventListener('input',refreshNote);
+    ns.addEventListener('click',function(){
+      var val=nt.value;ns.disabled=true;ns.classList.add('saving');nst.textContent='Enregistrement…';nst.className='notes-state';
+      api('update',{id:CUR.id,notes:val}).then(function(){
+        CUR.notes=val;var l2=LEADS.filter(function(x){return x.id===CUR.id;})[0];if(l2)l2.notes=val;
+        ns.classList.remove('saving');nst.textContent='Note enregistrée';nst.className='notes-state ok';toast('Note enregistrée');
+        setTimeout(function(){if(!noteDirty())nst.textContent='';},2500);
+      }).catch(function(){ns.classList.remove('saving');ns.disabled=false;nst.textContent='Erreur, réessayez';nst.className='notes-state err';});
+    });
+    refreshNote();
     document.getElementById('ddel').addEventListener('click',function(){
       if(!confirm('Supprimer définitivement la demande de '+(CUR.prenom||'ce contact')+' ?'))return;
       var id=CUR.id;LEADS=LEADS.filter(function(x){return x.id!==id;});closeDrawer();render();
