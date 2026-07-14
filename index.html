@@ -345,17 +345,24 @@
   .ac-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .sending{display:none;text-align:center;padding:34px 10px 30px}
   .sending.show{display:block}
-  .sending-t{font-weight:800;color:var(--ink);font-size:16px;margin-bottom:22px}
-  .send-steps{display:grid;gap:14px;max-width:290px;margin:0 auto;text-align:left}
-  .ss{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted);opacity:.5;transition:opacity .35s,color .35s}
+  .sending-t{font-weight:800;color:var(--ink);font-size:16px;margin-bottom:26px}
+  .send-steps{position:relative;display:grid;gap:22px;max-width:310px;margin:0 auto;text-align:left}
+  .send-steps::before{content:"";position:absolute;left:13px;top:14px;bottom:14px;width:2px;background:var(--line)}
+  .ss{display:flex;align-items:center;gap:14px;font-size:14px;color:var(--muted);opacity:.55;transition:opacity .4s,color .4s;position:relative}
   .ss.active,.ss.done{opacity:1;color:var(--ink);font-weight:600}
-  .ss-ic{width:24px;height:24px;border-radius:50%;border:2.5px solid var(--line);flex:none;position:relative;box-sizing:border-box;transition:border-color .35s,background .35s}
-  .ss.active .ss-ic{border-color:var(--blue);border-top-color:transparent;animation:spin .7s linear infinite}
-  .ss.done .ss-ic{border-color:#2fbf5f;background:#2fbf5f;animation:none}
-  .ss.done .ss-ic::after{content:"";position:absolute;left:7px;top:3px;width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+  .ss-ic{width:28px;height:28px;border-radius:50%;border:2.5px solid var(--line);flex:none;position:relative;box-sizing:border-box;background:#fff;z-index:1;transition:border-color .4s,background .4s,box-shadow .4s}
+  .ss.active .ss-ic{border-color:var(--blue);border-top-color:transparent;animation:spin .8s linear infinite;box-shadow:0 0 0 5px rgba(37,99,201,.12)}
+  .ss.done .ss-ic{border-color:#2fbf5f;background:#2fbf5f;animation:none;box-shadow:none}
+  .ss.done .ss-ic::after{content:"";position:absolute;left:8.5px;top:4px;width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);animation:pop .35s ease}
   @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes pop{0%{transform:rotate(45deg) scale(0)}60%{transform:rotate(45deg) scale(1.25)}100%{transform:rotate(45deg) scale(1)}}
   .next:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   .next:disabled:hover{transform:none}
+  input.invalid{border-color:#E05353!important;box-shadow:0 0 0 3px rgba(224,83,83,.14)!important}
+  .success.show .seal{animation:sealpop .5s cubic-bezier(.2,.8,.2,1.2)}
+  @keyframes sealpop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+  .success.show .recap{animation:fadeup .5s .18s ease both}
+  @keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -443,7 +450,7 @@
               <div class="r2"><div class="field"><label for="prenom">Prénom</label><input type="text" id="prenom" placeholder="Marie" autocomplete="given-name" /></div><div class="field"><label for="tel">Téléphone</label><input type="tel" id="tel" placeholder="06 12 34 56 78" autocomplete="tel" /></div></div>
               <div class="field"><label for="email">Email</label><input type="email" id="email" placeholder="marie.durand@email.fr" autocomplete="email" /></div>
               <label class="consent"><input type="checkbox" id="consent" /><span class="cbox"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ctxt">Oui, Alexandre peut me contacter pour affiner mon estimation. Mes coordonnées ne sont jamais revendues.</span></label>
-              <div class="err" id="e4">Laissez un moyen de vous joindre et cochez la case.</div>
+              <div class="err" id="e4">Prénom, téléphone à 10 chiffres et email valide requis, puis cochez la case.</div>
             </div>
             <div class="success" id="ok">
               <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
@@ -645,11 +652,12 @@
     updateNext();
   }
   const v=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
-  function valid(s){document.querySelectorAll('.err').forEach(e=>e.classList.remove('show'));if(s===1&&!data.type){document.getElementById('e1').classList.add('show');return false;}if(s===2&&(!v('adr')||!v('cp')||!v('ville'))){document.getElementById('e2').classList.add('show');return false;}if(s===3&&(!data.situation||(data.situation==='En étage'&&!v('etage')))){document.getElementById('e3').classList.add('show');return false;}if(s===6&&((!v('tel')&&!v('email'))||!document.getElementById('consent').checked)){document.getElementById('e4').classList.add('show');return false;}return true;}
+  function valid(s){document.querySelectorAll('.err').forEach(e=>e.classList.remove('show'));if(s===1&&!data.type){document.getElementById('e1').classList.add('show');return false;}if(s===2&&(!v('adr')||!v('cp')||!v('ville'))){document.getElementById('e2').classList.add('show');return false;}if(s===3&&(!data.situation||(data.situation==='En étage'&&!v('etage')))){document.getElementById('e3').classList.add('show');return false;}if(s===6){var _t6=v('tel').replace(/\D/g,'');if(!v('prenom')||_t6.length!==10||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'))||!document.getElementById('consent').checked){document.getElementById('e4').classList.add('show');return false;}}return true;}
   next.addEventListener('click',()=>{if(!valid(cur))return;if(cur<total){cur++;render();if(innerWidth<920)document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'start'});}else submit();});
   back.addEventListener('click',()=>{if(cur>1){cur--;render();}});
-  function stepValid(s){if(s===1)return !!data.type;if(s===2)return !!(v('adr')&&v('cp')&&v('ville'));if(s===3)return !!(data.situation&&(data.situation!=='En étage'||v('etage')));if(s===6)return !!((v('tel')||v('email'))&&document.getElementById('consent').checked);return true;}
-  function updateNext(){next.disabled=!stepValid(cur);}
+  function stepValid(s){if(s===1)return !!data.type;if(s===2)return !!(v('adr')&&v('cp')&&v('ville'));if(s===3)return !!(data.situation&&(data.situation!=='En étage'||v('etage')));if(s===6){var _t=v('tel').replace(/\D/g,'');return !!(v('prenom')&&_t.length===10&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'))&&document.getElementById('consent').checked);}return true;}
+  function fieldCheck(){var _t=document.getElementById('tel'),_e=document.getElementById('email');if(_t){var _tv=_t.value.replace(/\D/g,'');_t.classList.toggle('invalid',_t.value.trim().length>0&&_tv.length!==10);}if(_e){_e.classList.toggle('invalid',_e.value.trim().length>0&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(_e.value.trim()));}}
+  function updateNext(){fieldCheck();next.disabled=!stepValid(cur);}
   (function(){var _fe=document.getElementById('f');if(_fe){_fe.addEventListener('input',updateNext);_fe.addEventListener('change',updateNext);_fe.addEventListener('click',function(){setTimeout(updateNext,0);});}})();
   function submit(){
     const p={type:data.type||'',adresse:v('adr'),codePostal:v('cp'),ville:v('ville'),surface:v('surf'),pieces:v('pieces'),chambres:v('chambres'),situation:data.situation||'',etage:v('etage'),etat:data.etat||'',exterieur:(data.exterieur||[]).join(', '),annexes:(data.annexes||[]).join(', '),delai:data.delai||'',prenom:v('prenom'),telephone:v('tel'),email:v('email')};
@@ -672,8 +680,8 @@
     var _ids=['ss0','ss1','ss2'],_i=0;
     (function _seq(){
       if(_i>0){var _pv=document.getElementById(_ids[_i-1]);_pv.classList.remove('active');_pv.classList.add('done');}
-      if(_i<_ids.length){document.getElementById(_ids[_i]).classList.add('active');_i++;setTimeout(_seq,900);}
-      else{setTimeout(function(){document.getElementById('sending').classList.remove('show');document.getElementById('ok').classList.add('show');},450);}
+      if(_i<_ids.length){document.getElementById(_ids[_i]).classList.add('active');_i++;setTimeout(_seq,1200);}
+      else{setTimeout(function(){document.getElementById('sending').classList.remove('show');document.getElementById('ok').classList.add('show');},600);}
     })();
   }
   render();
