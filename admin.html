@@ -248,7 +248,7 @@
     'RDV pris':{c:'#12A85E',bg:'#D9F4E6'},
     'Perdu':{c:'#7A8798',bg:'#EEF1F5'}
   };
-  var PW='',LEADS=[],FILTER='Tous',SEARCH='',CUR=null;
+  var PW='',LEADS=[],FILTER='Nouveau',SEARCH='',CUR=null;
 
   function getPW(){try{return sessionStorage.getItem('emilio_pw')||'';}catch(e){return PW;}}
   function setPW(v){PW=v;try{sessionStorage.setItem('emilio_pw',v);}catch(e){}}
