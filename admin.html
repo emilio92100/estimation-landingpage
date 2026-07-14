@@ -149,6 +149,12 @@
   .notes{width:100%;min-height:96px;border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-size:14px;resize:vertical;line-height:1.5}
   .notes:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,201,.1)}
 
+  .d-cbtn.wa{border-color:#25D366;color:#0B7A5E}
+  .d-cbtn.wa svg{color:#25D366;stroke:none;fill:currentColor}
+  .d-cbtn.wa:hover{background:#EAFBF2;border-color:#25D366}
+  .d-del{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin-top:26px;padding:13px;border:1.5px solid #F3D5D5;background:#fff;color:#C0392B;border-radius:13px;font-weight:700;font-size:13.5px;cursor:pointer;transition:all .15s}
+  .d-del:hover{background:#FDF0F0;border-color:#E4A0A0}
+  .d-del svg{width:16px;height:16px;stroke:currentColor}
   .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;font-size:14px;font-weight:600;padding:13px 22px;border-radius:13px;box-shadow:0 20px 40px -16px rgba(15,32,56,.6);transition:all .3s;pointer-events:none;z-index:90}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -322,6 +328,7 @@
         '<div class="d-sec">Contact</div><div class="d-contact">'+
           (tel?'<a class="d-cbtn prim" href="tel:'+esc(tel)+'"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><span>'+esc(l.telephone)+'</span></a>':'')+
           (l.email?'<a class="d-cbtn" href="mailto:'+esc(l.email)+'"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><span>'+esc(l.email)+'</span></a>':'')+
+          (tel?'<a class="d-cbtn wa" href="https://wa.me/33'+esc(tel.replace(/^0/,''))+'?text='+encodeURIComponent('Bonjour '+(l.prenom||'')+', Alexandre d\'Emilio Immobilier. Vous avez demandé une estimation'+(l.ville?' pour votre bien à '+l.ville:'')+'. Quand seriez-vous disponible ?')+'" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-1.007zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.074-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg><span>Écrire sur WhatsApp</span></a>':'')+
         '</div>'+
         '<div class="d-sec">Le bien</div><div class="d-grid">'+
           row('Bien',esc(bienLine(l)))+row('Situation',esc(sitLine(l)))+
@@ -331,11 +338,17 @@
         '<div class="d-sec">Statut</div><div class="seg" id="seg">'+seg+'</div>'+
         '<div class="d-sec">Notes</div><textarea class="notes" id="notes" placeholder="Ajouter une note (rappel, remarque…)">'+esc(l.notes)+'</textarea>'+
         '<div class="d-sec">Informations</div><div class="d-grid">'+row('Reçu le',esc(fullDate(l.created_at)))+row('Source',esc(l.source))+'</div>'+
+        '<button class="d-del" id="ddel"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/></svg>Supprimer cette demande</button>'+
       '</div>';
     document.getElementById('drawer').classList.add('show');document.getElementById('scrim').classList.add('show');
     document.getElementById('dclose').addEventListener('click',closeDrawer);
     Array.prototype.forEach.call(document.querySelectorAll('#seg button'),function(b){b.addEventListener('click',function(){setStatus(CUR.id,b.dataset.s);openDrawer(CUR.id);});});
     var nt=document.getElementById('notes');nt.addEventListener('blur',function(){if(nt.value!==(CUR.notes||'')){CUR.notes=nt.value;api('update',{id:CUR.id,notes:nt.value}).then(function(){toast('Note enregistrée');});}});
+    document.getElementById('ddel').addEventListener('click',function(){
+      if(!confirm('Supprimer définitivement la demande de '+(CUR.prenom||'ce contact')+' ?'))return;
+      var id=CUR.id;LEADS=LEADS.filter(function(x){return x.id!==id;});closeDrawer();render();
+      api('delete',{id:id}).then(function(){toast('Demande supprimée');}).catch(function(){toast('Erreur');});
+    });
   }
   function closeDrawer(){document.getElementById('drawer').classList.remove('show');document.getElementById('scrim').classList.remove('show');CUR=null;}
 
