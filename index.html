@@ -35,7 +35,8 @@
 
   .hero{position:relative;overflow:hidden;padding:60px 0 78px;background:radial-gradient(1000px 540px at 90% -14%, #E4EEFF, transparent 60%), #fff}
   .hero .wrap{position:relative;z-index:2}
-  .hero-grid{display:grid;grid-template-columns:0.76fr 1.24fr;gap:46px;align-items:center}
+  .hero-grid{display:grid;grid-template-columns:0.76fr 1.24fr;gap:46px;align-items:start}
+  .hero-grid>div:first-child{padding-top:52px}
   .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:20px}
   .eyebrow::before{content:"";width:26px;height:1px;background:var(--blue);opacity:.6}
   .hero h1{font-size:clamp(27px,3.1vw,42px);font-weight:800;line-height:1.05;letter-spacing:-.02em;max-width:15ch}
@@ -167,28 +168,6 @@
   .rcard h3{font-size:19px;font-weight:700;margin-bottom:9px}
   .rcard p{font-size:14.5px;color:var(--muted);line-height:1.6}
 
-  /* INDEPENDANT vs RESEAU */
-  .reseau{background:var(--mist);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1040px;margin:0 auto}
-  .cmp .col{border-radius:18px;padding:30px 28px}
-  .cmp .cold{background:#fff;border:1px solid var(--line)}
-  .cmp .warm{background:linear-gradient(165deg,#E7F0FD,#D8E7FF);border:1px solid #C7DBF6;box-shadow:0 26px 50px -34px rgba(37,99,201,.5)}
-  .cmp .tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:18px}
-  .cmp .tag svg{width:16px;height:16px;flex:none}
-  .cmp .cold .tag{color:var(--muted)}
-  .cmp .cold .tag svg{stroke:var(--muted)}
-  .cmp .warm .tag{color:var(--blue)}
-  .cmp .warm .tag svg{stroke:var(--blue)}
-  .cmp ul{list-style:none;display:grid;gap:13px}
-  .cmp li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;line-height:1.5}
-  .cmp li svg{width:18px;height:18px;flex:none;margin-top:1px}
-  .cmp .cold li{color:var(--muted)}
-  .cmp .cold li svg{stroke:#B7C2D0}
-  .cmp .warm li{color:var(--ink);font-weight:500}
-  .cmp .warm li svg{stroke:var(--blue)}
-  .reseau .closing{max-width:700px;margin:36px auto 0;text-align:center;font-size:clamp(19px,2.5vw,25px);font-weight:600;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
-  .reseau .closing b{color:var(--blue)}
-  @media (max-width:760px){.cmp{grid-template-columns:1fr}}
 
   /* AVIS */
   .avis{background:var(--mist);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -254,6 +233,7 @@
     .hero-grid>div:first-child{text-align:center}
     .hero .lede{display:none}
     .chips-row{display:none}
+    .season{margin:16px auto 0;text-align:left;max-width:100%}
     .hero .eyebrow{justify-content:center;margin-bottom:14px;font-size:11.5px}
     .hero .eyebrow::before{display:none}
     .hero-creds{justify-content:center;margin-top:4px}
@@ -286,7 +266,6 @@
   .cred .ct2{display:flex;flex-direction:column;gap:1px;line-height:1.2;text-align:left}
   .cred .ct2 .t{font-weight:800;font-size:13.5px;color:var(--ink)}
   .cred .ct2 .s{font-weight:600;font-size:11px;color:var(--muted)}
-  .reseau .closing{text-wrap:balance}
   .chips .chip{display:inline-flex;align-items:center;gap:6px}
   .chips .chip svg{width:15px;height:15px;stroke:currentColor;flex:none}
   .sitrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -327,14 +306,6 @@
   .eb-pill svg{width:12px;height:12px;flex:none}
   .eb-loc{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
   .eb-loc::before{content:"";width:5px;height:5px;border-radius:50%;background:#C3D0E0}
-  .myths{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:920px;margin:0 auto}
-  .myth{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px 24px;transition:transform .25s ease,box-shadow .25s ease}
-  .myth:hover{transform:translateY(-3px);box-shadow:0 26px 46px -30px rgba(15,35,64,.35)}
-  .myth-q{font-size:15.5px;font-weight:700;color:var(--muted);line-height:1.4;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--line)}
-  .myth-a{font-size:14.5px;color:var(--ink);line-height:1.6}
-  .ml{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;color:#9aa7b5}
-  .ml.on{color:var(--blue)}
-  @media (max-width:860px){.myths{grid-template-columns:1fr}}
   @media (max-width:520px){header .logo img{height:42px}}
   .ac-wrap{position:relative}
   .ac-list{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 22px 44px -18px rgba(15,32,56,.55);max-height:230px;overflow-y:auto;display:none}
@@ -356,13 +327,37 @@
   .ss.done .ss-ic::after{content:"";position:absolute;left:8.5px;top:4px;width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);animation:pop .35s ease}
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes pop{0%{transform:rotate(45deg) scale(0)}60%{transform:rotate(45deg) scale(1.25)}100%{transform:rotate(45deg) scale(1)}}
-  .next:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
-  .next:disabled:hover{transform:none}
   input.invalid{border-color:#E05353!important;box-shadow:0 0 0 3px rgba(224,83,83,.14)!important}
   .success.show .seal{animation:sealpop .5s cubic-bezier(.2,.8,.2,1.2)}
   @keyframes sealpop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
   .success.show .recap{animation:fadeup .5s .18s ease both}
   @keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .next:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+  .next:disabled:hover{transform:none}
+  .season{position:relative;display:flex;gap:14px;align-items:center;margin-top:4px;padding:15px 18px;background:linear-gradient(115deg,#FFF7E9 0%,#FFF1DA 55%,#FFEAD0 100%);border:1px solid #F6E0B8;border-radius:15px;max-width:410px;overflow:hidden;box-shadow:0 14px 30px -22px rgba(196,124,20,.55)}
+  .season::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.65),transparent);transform:skewX(-18deg);animation:shine 7s ease-in-out infinite}
+  @keyframes shine{0%,72%{left:-60%}90%,100%{left:120%}}
+  .sun{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center}
+  .sun svg{width:42px;height:42px;overflow:visible}
+  .sun .core{fill:#FBB03B;filter:drop-shadow(0 0 5px rgba(240,154,34,.55));animation:coreglow 3.4s ease-in-out infinite;transform-origin:22px 22px}
+  @keyframes coreglow{0%,100%{fill:#FBB03B;transform:scale(1)}50%{fill:#FFC759;transform:scale(1.06)}}
+  .sun .halo{fill:#FBB03B;opacity:.3;transform-origin:22px 22px;animation:halo 3.4s ease-out infinite}
+  @keyframes halo{0%{transform:scale(1);opacity:.32}70%,100%{transform:scale(1.85);opacity:0}}
+  .sun .rays{transform-origin:22px 22px;animation:sunspin 26s linear infinite}
+  .sun .rays line{transform-origin:22px 22px;animation:ray 2.6s ease-in-out infinite}
+  .sun .rays line:nth-child(1){animation-delay:0s}
+  .sun .rays line:nth-child(2){animation-delay:.15s}
+  .sun .rays line:nth-child(3){animation-delay:.3s}
+  .sun .rays line:nth-child(4){animation-delay:.45s}
+  .sun .rays line:nth-child(5){animation-delay:.6s}
+  .sun .rays line:nth-child(6){animation-delay:.75s}
+  .sun .rays line:nth-child(7){animation-delay:.9s}
+  .sun .rays line:nth-child(8){animation-delay:1.05s}
+  @keyframes ray{0%,100%{opacity:.5;transform:scale(.82)}50%{opacity:1;transform:scale(1)}}
+  @keyframes sunspin{to{transform:rotate(360deg)}}
+  .season-t{position:relative;z-index:2;font-size:12.5px;color:#8A6A2E;line-height:1.5}
+  .season-t b{display:block;color:#6B4E17;font-size:13.5px;font-weight:800;margin-bottom:3px;letter-spacing:-.01em}
+  @media (prefers-reduced-motion:reduce){.season::after,.sun .core,.sun .halo,.sun .rays,.sun .rays line,.ss.active .ss-ic{animation:none}}
 </style>
 </head>
 <body>
@@ -386,10 +381,9 @@
         <div class="eyebrow"><span class="eb-pill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>Estimation gratuite</span><span class="eb-loc">Paris &amp; Hauts-de-Seine</span></div>
         <h1>Le juste prix de votre bien, par un <span>expert</span>.</h1>
         <p class="lede">Répondez à quelques questions sur votre bien et recevez une estimation fiable, au juste prix.</p>
-        <div class="chips-row">
-          <span class="tchip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Gratuit</span>
-          <span class="tchip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Un expert se déplace</span>
-          <span class="tchip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Réponse sous 24 h</span>
+        <div class="season">
+          <span class="sun"><svg viewBox="0 0 44 44" aria-hidden="true"><g class="rays" stroke="#F2A128" stroke-width="2.4" stroke-linecap="round"><line x1="22" y1="3.5" x2="22" y2="9"/><line x1="35.1" y1="8.9" x2="31.2" y2="12.8"/><line x1="40.5" y1="22" x2="35" y2="22"/><line x1="35.1" y1="35.1" x2="31.2" y2="31.2"/><line x1="22" y1="40.5" x2="22" y2="35"/><line x1="8.9" y1="35.1" x2="12.8" y2="31.2"/><line x1="3.5" y1="22" x2="9" y2="22"/><line x1="8.9" y1="8.9" x2="12.8" y2="12.8"/></g><circle class="halo" cx="22" cy="22" r="9"/><circle class="core" cx="22" cy="22" r="9"/></svg></span>
+          <div class="season-t"><b>Vendre à la rentrée&nbsp;? Ça se prépare cet été.</b>Septembre est l'un des mois les plus actifs pour les acheteurs. Faites estimer votre bien maintenant pour arriver prêt, au bon prix.</div>
         </div>
       </div>
 
@@ -498,35 +492,6 @@
           <button class="btn-solid" onclick="goForm()">Demander mon estimation <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           <a class="btn-tel" href="tel:+33658957632"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>06 58 95 76 32</a>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- INDEPENDANT -->
-<section class="sec reseau">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">Indépendant, votre avantage</div>
-      <h2>Ce qu'on croit d'un grand réseau… et ce qui se passe vraiment.</h2>
-      <p>Beaucoup pensent qu'une grande enseigne vend mieux. En réalité, l'immobilier est 100 % local.</p>
-    </div>
-    <div class="myths">
-      <div class="myth">
-        <div class="myth-q"><span class="ml">Idée reçue</span>« Un grand réseau vend plus vite. »</div>
-        <div class="myth-a"><span class="ml on">La réalité</span>Vos acheteurs consultent tous les mêmes portails. Ce qui vend, c'est le soin apporté à votre bien et une connaissance fine du quartier — pas la taille de l'enseigne.</div>
-      </div>
-      <div class="myth">
-        <div class="myth-q"><span class="ml">Idée reçue</span>« Un grand groupe, c'est plus rassurant. »</div>
-        <div class="myth-a"><span class="ml on">La réalité</span>Vous avez un seul interlocuteur, de la première visite à la signature. C'est mon nom et ma carte professionnelle qui vous engagent — pas une plateforme.</div>
-      </div>
-      <div class="myth">
-        <div class="myth-q"><span class="ml">Idée reçue</span>« Ils ont plus de moyens de diffusion. »</div>
-        <div class="myth-a"><span class="ml on">La réalité</span>Tout le monde paie les mêmes portails. Je limite volontairement mes mandats pour offrir un suivi sur-mesure et une vraie mise en valeur de votre bien.</div>
-      </div>
-      <div class="myth">
-        <div class="myth-q"><span class="ml">Idée reçue</span>« Il faut une grande enseigne pour vendre. »</div>
-        <div class="myth-a"><span class="ml on">La réalité</span>Un acheteur ne fait jamais une offre pour le nom de l'agence : il achète le bien qui lui plaît, avec un interlocuteur de confiance. C'est le bien et l'accompagnement qui déclenchent l'offre — pas le logo.</div>
       </div>
     </div>
   </div>
