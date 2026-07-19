@@ -35,10 +35,10 @@
 
   .hero{position:relative;overflow:hidden;padding:60px 0 78px;background:radial-gradient(1000px 540px at 90% -14%, #E4EEFF, transparent 60%), #fff}
   .hero .wrap{position:relative;z-index:2}
-  .hero-grid{display:grid;grid-template-columns:0.76fr 1.24fr;grid-template-rows:max-content 1fr;column-gap:46px;row-gap:0;align-items:start}
-  .hero-copy{grid-column:1;grid-row:1;padding-top:52px}
+  .hero-grid{display:grid;grid-template-columns:0.76fr 1.24fr;grid-template-rows:1fr max-content max-content 1fr;column-gap:46px;row-gap:24px;align-items:start}
+  .hero-copy{grid-column:1;grid-row:3;padding-top:0}
   .season{grid-column:1;grid-row:2;margin-top:0}
-  .card-wrap{grid-column:2;grid-row:1/span 2}
+  .card-wrap{grid-column:2;grid-row:1/span 4}
   .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:20px}
   .eyebrow::before{content:"";width:26px;height:1px;background:var(--blue);opacity:.6}
   .hero h1{font-size:clamp(27px,3.1vw,42px);font-weight:800;line-height:1.05;letter-spacing:-.02em;max-width:15ch}
@@ -336,7 +336,7 @@
   @keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .next:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   .next:disabled:hover{transform:none}
-  .season{position:relative;display:flex;gap:14px;align-items:center;margin-top:4px;padding:15px 18px;background:linear-gradient(115deg,#FFF7E9 0%,#FFF1DA 55%,#FFEAD0 100%);border:1px solid #F6E0B8;border-radius:15px;max-width:410px;overflow:hidden;box-shadow:0 14px 30px -22px rgba(196,124,20,.55)}
+  .season{position:relative;display:flex;gap:14px;align-items:center;margin-top:0;padding:15px 18px;background:linear-gradient(115deg,#FFF7E9 0%,#FFF1DA 55%,#FFEAD0 100%);border:1px solid #F6E0B8;border-radius:15px;max-width:410px;overflow:hidden;box-shadow:0 14px 30px -22px rgba(196,124,20,.55)}
   .season::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.65),transparent);transform:skewX(-18deg);animation:shine 7s ease-in-out infinite}
   @keyframes shine{0%,72%{left:-60%}90%,100%{left:120%}}
   .sun{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center}
