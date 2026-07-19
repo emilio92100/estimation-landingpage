@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Estimation gratuite de votre bien — Emilio Immobilier · Paris & Hauts-de-Seine</title>
 <meta name="description" content="Faites estimer votre appartement ou votre maison par Alexandre, expert Emilio qui se déplace chez vous. Gratuit, sans engagement. Paris et Hauts-de-Seine." />
+<!-- ===== Google Ads : tag + Consent Mode v2 (RGPD) =====
+     ⚠️ Remplacer AW-XXXXXXXXXX (2 endroits) par votre ID de conversion Google Ads -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent','default',{
+    'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied',
+    'wait_for_update':500
+  });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXXX"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config','AW-XXXXXXXXXX');
+</script>
+<!-- ===== fin tag Google ===== -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -373,6 +389,20 @@
     .cred-note .ct{font-size:12.5px;line-height:1.5}
     .expert-txt ul{max-width:100%;margin-left:0}
   }
+  .cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;z-index:100;max-width:720px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px -22px rgba(15,32,56,.5);padding:16px 20px;transform:translateY(180%);opacity:0;transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .35s ease}
+  .cookie-banner.show{transform:none;opacity:1}
+  .cookie-inner{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .cookie-txt{flex:1;min-width:230px;font-size:13px;color:var(--muted);line-height:1.5;margin:0}
+  .cookie-txt b{display:block;color:var(--ink);font-size:14.5px;font-weight:800;margin-bottom:3px;letter-spacing:-.01em}
+  .cookie-txt a{color:var(--blue);font-weight:600}
+  .cookie-btns{display:flex;gap:10px;flex:none}
+  .ck-btn{font-family:inherit;font-weight:700;font-size:14px;padding:11px 22px;border-radius:10px;border:1px solid var(--line);transition:background .18s ease,border-color .18s ease,transform .18s ease}
+  .ck-btn:hover{transform:translateY(-1px)}
+  .ck-refuse{background:#fff;color:var(--ink)}
+  .ck-refuse:hover{background:var(--mist)}
+  .ck-accept{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .ck-accept:hover{background:var(--blue);border-color:var(--blue)}
+  @media(max-width:600px){.cookie-banner{left:10px;right:10px;bottom:10px;padding:15px 16px}.cookie-inner{flex-direction:column;align-items:stretch;gap:14px}.ck-btn{flex:1}}
 </style>
 </head>
 <body>
@@ -600,6 +630,7 @@
           <ul>
             <li><a href="/mentions-legales.html">Mentions légales</a></li>
             <li><a href="/politique-de-confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="#" id="cookie-manage">Gérer les cookies</a></li>
             <li><a href="#">Nos secteurs</a></li>
           </ul>
         </div>
@@ -640,6 +671,8 @@
   function submit(){
     const p={type:data.type||'',adresse:v('adr'),codePostal:v('cp'),ville:v('ville'),surface:v('surf'),pieces:v('pieces'),chambres:v('chambres'),situation:data.situation||'',etage:v('etage'),etat:data.etat||'',exterieur:(data.exterieur||[]).join(', '),annexes:(data.annexes||[]).join(', '),delai:data.delai||'',prenom:v('prenom'),telephone:v('tel'),email:v('email')};
     try{fetch(SUPABASE_FN_URL,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify(Object.assign({source:'landing-estimation-form'},p))});}catch(e){}
+    /* Conversion Google Ads — ⚠️ remplacer AW-XXXXXXXXXX/CONVERSION_LABEL par vos identifiants */
+    try{if(window.gtag)gtag('event','conversion',{'send_to':'AW-XXXXXXXXXX/CONVERSION_LABEL'});}catch(e){}
     console.log('Estimation:',p);
     document.getElementById('nav').style.display='none';document.querySelector('.prog').style.display='none';document.getElementById('foot').style.display='none';
     panels.forEach(x=>x.classList.remove('active'));document.getElementById('sending').classList.add('show');
@@ -690,5 +723,36 @@
   }
   bindAutocomplete();
 </script>
+
+<!-- ===== Bandeau cookies (consentement RGPD) ===== -->
+<div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Consentement aux cookies">
+  <div class="cookie-inner">
+    <p class="cookie-txt"><b>Cookies &amp; confidentialité</b>Nous utilisons des cookies de mesure pour évaluer l'efficacité de nos annonces. Vous pouvez les accepter ou les refuser librement. <a href="/politique-de-confidentialite.html">En savoir plus</a>.</p>
+    <div class="cookie-btns">
+      <button type="button" class="ck-btn ck-refuse" id="cookie-refuse">Refuser</button>
+      <button type="button" class="ck-btn ck-accept" id="cookie-accept">Accepter</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var KEY='emilio_consent_v1';
+  var banner=document.getElementById('cookie-banner');
+  function grant(){if(window.gtag){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}
+  function deny(){if(window.gtag){gtag('consent','update',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied'});}}
+  function show(){if(banner)banner.classList.add('show');}
+  function hide(){if(banner)banner.classList.remove('show');}
+  var saved=null;try{saved=localStorage.getItem(KEY);}catch(e){}
+  if(saved==='granted')grant();
+  else if(!saved)show();
+  function choose(state){try{localStorage.setItem(KEY,state);}catch(e){}if(state==='granted')grant();else deny();hide();}
+  var a=document.getElementById('cookie-accept'),r=document.getElementById('cookie-refuse');
+  if(a)a.addEventListener('click',function(){choose('granted');});
+  if(r)r.addEventListener('click',function(){choose('denied');});
+  var m=document.getElementById('cookie-manage');
+  if(m)m.addEventListener('click',function(e){e.preventDefault();show();});
+})();
+</script>
+<!-- ===== fin bandeau cookies ===== -->
 </body>
 </html>
